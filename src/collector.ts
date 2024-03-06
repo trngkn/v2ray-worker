@@ -18,6 +18,7 @@ export async function GetConfigList(url: URL, env: Env): Promise<Array<Config>> 
   let includeMergedConfigs: boolean = true
   let cleanDomainIPs: Array<string> = []
   let myConfigs: Array<string> = []
+  let includeNoTLS: boolean = false
   let settingsNotAvailable: boolean = true
 
   try {
@@ -37,6 +38,7 @@ export async function GetConfigList(url: URL, env: Env): Promise<Array<Config>> 
     cleanDomainIPs = await env.settings.get("CleanDomainIPs").then(val => {return val ? val.split("\n") : []})
     settingsNotAvailable = (await env.settings.get("MaxConfigs")) === null
     myConfigs = (await env.settings.get("Configs"))?.split("\n") || []
+    includeNoTLS = await env.settings.get("MaxConfigs") || false;
   } catch { }
   
   if (settingsNotAvailable) {
@@ -153,7 +155,7 @@ export async function GetConfigList(url: URL, env: Env): Promise<Array<Config>> 
 
   if (protocols.includes("vless")) {
     finalConfigList = AddNumberToConfigs(finalConfigList, maxVlessConfigs + 1)
-    finalConfigList = (await GetVlessConfigList(url.hostname, cleanDomainIPs, maxVlessConfigs, env, true)).concat(finalConfigList)
+    finalConfigList = (await GetVlessConfigList(url.hostname, cleanDomainIPs, maxVlessConfigs, env, includeNoTLS)).concat(finalConfigList)
   } else {
     finalConfigList = AddNumberToConfigs(finalConfigList, 1)
   }

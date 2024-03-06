@@ -23,6 +23,7 @@ export async function GetPanel(request: Request, env: Env): Promise<Response> {
     const configs: Array<string> = (await env.settings.get("Configs"))?.split("\n") || []
     const includeOriginalConfigs: string = await env.settings.get("IncludeOriginalConfigs") || "yes"
     const includeMergedConfigs: string = await env.settings.get("IncludeMergedConfigs") || "yes"
+    const includeNoTLS: string = await env.settings.get("IncludeNoTLS") || "yes"
     var uuid: string = await env.settings.get("UUID") || ""
     if (!IsValidUUID(uuid)) {
       uuid = uuidv4()
@@ -140,6 +141,17 @@ export async function GetPanel(request: Request, env: Env): Promise<Response> {
               <div class="form-check">
                 <input type="checkbox" name="protocols" value="ss" class="form-check-input" id="ss-protocol-ckeck" ${protocols.includes('ss') ? "checked" : ""} />
                 <label class="form-check-label" for="ss-protocol-ckeck">ShadowSocks</label>
+              </div>
+            </div>
+          </div>
+          <div class="mb-1 p-1">
+            <label for="tls" class="form-label fw-bold">
+              TLS / رمزنگاری:
+            </label>
+            <div id="tls">
+              <div class="form-check">
+                <input type="checkbox" name="notls" value="true" class="form-check-input" id="notls-ckeck" ${includeNoTLS == "yes" ? "checked" : ""} />
+                <label class="form-check-label" for="notls-ckeck">Include configs with no TLS</label>
               </div>
             </div>
           </div>
@@ -314,6 +326,7 @@ export async function PostPanel(request: Request, env: Env): Promise<Response> {
       await env.settings.put("Configs", formData.get("configs")?.trim().split("\n").map(str => str.trim()).join("\n") || "")
       await env.settings.put("IncludeOriginalConfigs", formData.get("original") || "no")
       await env.settings.put("IncludeMergedConfigs", formData.get("merged") || "no")
+      await env.settings.put("IncludeNoTLS", formData.get("notls") || "no")
     } else {
       await env.settings.delete("MaxConfigs")
       await env.settings.delete("Protocols")
@@ -324,6 +337,7 @@ export async function PostPanel(request: Request, env: Env): Promise<Response> {
       await env.settings.delete("Configs")
       await env.settings.delete("IncludeOriginalConfigs")
       await env.settings.delete("IncludeMergedConfigs")
+      await env.settings.delete("IncludeNoTLS")
       await env.settings.delete("UUID")
       await env.settings.delete("Password")
       await env.settings.delete("Token")
