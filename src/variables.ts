@@ -45,6 +45,15 @@ export const cfPorts: Array<number> = [
 	8443,
 ]
 
+export const cfNoTLSPorts: Array<number> = [
+  80,
+	8080,
+	2052,
+	2082,
+	2086,
+	2095,
+]
+
 export const supportedCiphers: Array<string> = [
 	"none",
 	"auto",

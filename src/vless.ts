@@ -1,26 +1,29 @@
 import { UUID } from "crypto";
 import { connect } from 'cloudflare:sockets'
 import { GetVlessConfig, MuddleDomain } from "./helpers"
-import { cfPorts } from "./variables"
+import { cfNoTLSPorts, cfPorts } from "./variables"
 import { RemoteSocketWrapper, CustomArrayBuffer, VlessHeader, UDPOutbound, Config, Env } from "./interfaces"
 
 const WS_READY_STATE_OPEN: number = 1
 const WS_READY_STATE_CLOSING: number = 2
 let uuid: string = ""
 
-export async function GetVlessConfigList(sni: string, addressList: Array<string>, max: number, env: Env) {
+export async function GetVlessConfigList(sni: string, addressList: Array<string>, max: number, env: Env, includeNoTLSConfigs: boolean = false) {
   let uuid: string | null = await env.settings.get("UUID")
   let configList: Array<Config> = []
   if (uuid) {
-    for (let i = 0; i < max; i++) {
-      configList.push(GetVlessConfig(
-        i + 1,
-        uuid as UUID,
-        MuddleDomain(sni),
-        addressList[Math.floor(Math.random() * addressList.length)],
-        cfPorts[Math.floor(Math.random() * cfPorts.length)]
-      ))
-    }
+	for (let i = 0; i < max; i++) {
+		let ports = (includeNoTLSConfigs && i > max / 2) ? cfNoTLSPorts : cfPorts;
+		let tls = (includeNoTLSConfigs && i > max / 2) ? false : true;
+		configList.push(GetVlessConfig(
+			i + 1,
+			uuid as UUID,
+			MuddleDomain(sni),
+			addressList[Math.floor(Math.random() * addressList.length)],
+			ports[Math.floor(Math.random() * ports.length)],
+			tls
+		))
+	}
   }
 
   return configList
