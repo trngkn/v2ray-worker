@@ -150,7 +150,7 @@ export async function GetPanel(request: Request, env: Env): Promise<Response> {
             </label>
             <div id="tls">
               <div class="form-check">
-                <input type="checkbox" name="notls" value="true" class="form-check-input" id="notls-ckeck" ${includeNoTLS == "yes" ? "checked" : ""} />
+                <input type="checkbox" name="notls" value="yes" class="form-check-input" id="notls-ckeck" ${includeNoTLS == "yes" ? "checked" : ""} />
                 <label class="form-check-label" for="notls-ckeck">Include configs with no TLS</label>
               </div>
             </div>
