@@ -23,7 +23,7 @@ export async function GetPanel(request: Request, env: Env): Promise<Response> {
     const configs: Array<string> = (await env.settings.get("Configs"))?.split("\n") || []
     const includeOriginalConfigs: string = await env.settings.get("IncludeOriginalConfigs") || "yes"
     const includeMergedConfigs: string = await env.settings.get("IncludeMergedConfigs") || "yes"
-    const includeNoTLS: string = await env.settings.get("IncludeNoTLS") || "yes"
+    const includeNoTLS: string = await env.settings.get("IncludeNoTLS") || "no"
     var uuid: string = await env.settings.get("UUID") || ""
     if (!IsValidUUID(uuid)) {
       uuid = uuidv4()

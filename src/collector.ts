@@ -38,7 +38,7 @@ export async function GetConfigList(url: URL, env: Env): Promise<Array<Config>> 
     cleanDomainIPs = await env.settings.get("CleanDomainIPs").then(val => {return val ? val.split("\n") : []})
     settingsNotAvailable = (await env.settings.get("MaxConfigs")) === null
     myConfigs = (await env.settings.get("Configs"))?.split("\n") || []
-    includeNoTLS = await env.settings.get("MaxConfigs") || false;
+    includeNoTLS = await env.settings.get("IncludeNoTLS") || false;
   } catch { }
   
   if (settingsNotAvailable) {
