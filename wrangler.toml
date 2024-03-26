@@ -3,5 +3,5 @@ main = "src/worker.ts"
 compatibility_date = "2023-08-14"
 
 kv_namespaces = [
-  { binding = "settings", id = "0ddaa47e0bf248c48a95437db2bfeb60" }
+  { binding = "settings", id = "460e9434388d48409be4003cf7ea6889" }
 ]
