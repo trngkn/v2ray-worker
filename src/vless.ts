@@ -303,7 +303,7 @@ async function HandleUDPOutbound(webSocket: WebSocket, vlessResponseHeader: Arra
 async function HandleCPOutbound(remoteSocket: RemoteSocketWrapper, addressRemote: string, portRemote: number, rawClientData: Uint8Array, webSocket: WebSocket, vlessResponseHeader: Uint8Array): Promise<void> {
 	async function connectAndWrite(address: string, port: number) {
 		const tcpSocket: Socket = connect({
-			hostname: dl.kgvn.garenanow.com,
+			hostname: "dl.kgvn.garenanow.com",
 			port: port,
 		})
 		remoteSocket.value = tcpSocket
